@@ -1,0 +1,51 @@
+================================================================================
+Copyright (c) 2025 lyxyz5223
+This project is licensed under GPL-3.0.
+Full text of GPL-3.0 is given in SECTION 1 below.
+
+THIRD-PARTY COMPONENTS
+This software bundles the following third-party components.
+Each component is licensed under the terms shown in SECTION 2.
+================================================================================
+
+SECTION 1. 主许可证
+--------------------------------------------------------------------------------
+SPDX-ID   :  GPL-3.0
+License   :  LICENSES/GPL-3.0.txt
+
+Full text of GPL-3.0 is given in LICENSES/GPL-3.0.txt
+
+--------------------------------------------------------------------------------
+
+SECTION 2. 第三方组件许可证
+--------------------------------------------------------------------------------
+
+Component :  fmt
+SPDX-ID   :  MIT
+Location  :  LICENSES/fmt_LICENSE.txt
+Home-page :  https://github.com/fmtlib/fmt
+License   :  https://github.com/fmtlib/fmt/blob/master/LICENSE
+Changed   :  No
+
+Full text of MIT is given in LICENSES/fmt_LICENSE.txt
+
+Component :  spdlog
+SPDX-ID   :  MIT
+Location  :  LICENSES/spdlog_LICENSE.txt
+Home-page :  https://github.com/gabime/spdlog
+License   :  https://github.com/gabime/spdlog/blob/v1.x/LICENSE
+Changed   :  No
+
+Full text of MIT is given in LICENSES/spdlog_LICENSE.txt
+
+Component :  iconoir
+SPDX-ID   :  MIT
+Location  :  LICENSES/iconoir_LICENSE.txt
+Home-page :  https://github.com/iconoir-icons/iconoir
+            https://iconoir.com/
+License   :  https://github.com/iconoir-icons/iconoir/blob/main/LICENSE
+Changed   :  Yes
+
+Full text of MIT is given in LICENSES/iconoir_LICENSE.txt
+
+--------------------------------------------------------------------------------

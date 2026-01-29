@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Debug(win7)
+/MusicUSBEncrypt/Debug(win7)
+/MusicUSBEncrypt/Release(win7)
+/Release(win7)
+/pack
