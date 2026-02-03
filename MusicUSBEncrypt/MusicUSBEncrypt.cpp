@@ -30,13 +30,25 @@ bool MusicUSBEncrypt::isEncrypted(std::string drivePath, bool& isSupportedFormat
         throw;
     }
     // 以上检验=>驱动器格式，标准格式，不容有错，当无法识别时使用下面过程检测
-    if (driveType.empty()) // 为空说明检测失败
+    if (!driveType.empty()) // 为空说明检测失败
+    {
+        if (driveType != supportedFormat)
+        {
+            isSupportedFormat = false;
+            QMessageBox::warning(this, "Warning", tr("不支持的分区格式：%1，请使用FAT32格式分区。").arg(QString::fromStdString(driveType)));
+            return false;
+        }
+        else
+            isSupportedFormat = true;
+    }
+    else
     {
         try {
             driveType = DriveOperation::detectRawFileSystem(drivePath);
             if (driveType != supportedFormat)
             {
                 isSupportedFormat = false;
+                QMessageBox::warning(this, "Warning", tr("不支持的分区格式：%1，请使用FAT32格式分区。").arg(QString::fromStdString(driveType)));
                 return false;
             }
             else
