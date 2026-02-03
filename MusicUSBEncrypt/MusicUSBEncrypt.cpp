@@ -17,8 +17,9 @@ MusicUSBEncrypt::~MusicUSBEncrypt()
 
 bool MusicUSBEncrypt::isEncrypted(std::string drivePath, bool& isSupportedFormat)
 {
+    std::string driveType;
     try {
-        auto driveType = DriveOperation::getFileSystemType(drivePath);
+        driveType = DriveOperation::getFileSystemType(drivePath);
     }
     catch (std::exception ex) {
         logger.error("Failed to get file system type: {}", ex.what());
@@ -28,24 +29,27 @@ bool MusicUSBEncrypt::isEncrypted(std::string drivePath, bool& isSupportedFormat
         logger.error("Failed to get file system type for unknown error");
         throw;
     }
-    // 以上检验=>驱动器错误或者已加密
-    try {
-        auto driveType = DriveOperation::detectRawFileSystem(drivePath);
-        if (driveType != supportedFormat)
-        {
-            isSupportedFormat = false;
-            return false;
+    // 以上检验=>驱动器格式，标准格式，不容有错，当无法识别时使用下面过程检测
+    if (driveType.empty()) // 为空说明检测失败
+    {
+        try {
+            driveType = DriveOperation::detectRawFileSystem(drivePath);
+            if (driveType != supportedFormat)
+            {
+                isSupportedFormat = false;
+                return false;
+            }
+            else
+                isSupportedFormat = true;
         }
-        else
-            isSupportedFormat = true;
-    }
-    catch (std::exception ex) {
-        logger.error("Failed to detect raw file system: {}", ex.what());
-        throw;
-    }
-    catch(...) {
-        logger.error("Failed to detect raw file system for unknown error");
-        throw;
+        catch (std::exception ex) {
+            logger.error("Failed to detect raw file system: {}", ex.what());
+            throw;
+        }
+        catch (...) {
+            logger.error("Failed to detect raw file system for unknown error");
+            throw;
+        }
     }
     // 以上检验=>驱动器是有问题的FAT32格式分区
     if (!DriveOperation::processFAT32BootSector(drivePath, [this](unsigned char* bytes, size_t size, bool& write) {
@@ -268,7 +272,7 @@ unsigned char MusicUSBEncrypt::getMediaDescriptor(unsigned char* bytes, size_t s
 
 void MusicUSBEncrypt::encryptPartition()
 {
-    std::string drivePath = ui.comboBoxTargetPartition->currentText().toStdString() + ":\\";
+    std::string drivePath = uiGetSelectedDrivePath();
     try {
         bool isSupportedFormat = false;
         if (isEncrypted(drivePath, isSupportedFormat))
@@ -296,7 +300,7 @@ void MusicUSBEncrypt::encryptPartition()
 
 void MusicUSBEncrypt::decryptPartition()
 {
-    std::string drivePath = ui.comboBoxTargetPartition->currentText().toStdString() + ":\\";
+    std::string drivePath = uiGetSelectedDrivePath();
     try {
         bool isSupportedFormat = false;
         if (isEncrypted(drivePath, isSupportedFormat))
@@ -324,13 +328,13 @@ void MusicUSBEncrypt::decryptPartition()
 
 void MusicUSBEncrypt::formatPartition()
 {
-    std::string drivePath = ui.comboBoxTargetPartition->currentText().toStdString() + ":\\";
+    std::string drivePath = uiGetSelectedDrivePath();
     DriveOperation::formatPartition(drivePath, supportedFormat, true);
 }
 
 void MusicUSBEncrypt::ejectDrive()
 {
-    std::string drivePath = ui.comboBoxTargetPartition->currentText().toStdString() + ":\\";
+    std::string drivePath = uiGetSelectedDrivePath();
     bool result = DriveOperation::ejectDrive(drivePath);
     if (result)
     {

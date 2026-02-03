@@ -21,7 +21,7 @@ public:
 private:
     Ui::MusicUSBEncryptClass ui;
     const std::string supportedFormat = "FAT32";
-    constexpr static unsigned char encryptedMediaDescriptor = (unsigned char)0x01;
+    constexpr static unsigned char encryptedMediaDescriptor = (unsigned char)0xFA;
     bool isEncrypted(std::string drivePath, bool& isSupportedFormat);
     bool encryptDrive(std::string drivePath);
     bool decryptDrive(std::string drivePath);
@@ -64,6 +64,9 @@ private:
     bool changeMediaDescriptor(unsigned char* bytes, size_t size, unsigned char descriptor);
     unsigned char getMediaDescriptor(unsigned char* bytes, size_t size);
 
+    std::string uiGetSelectedDrivePath() const {
+        return ui.comboBoxTargetPartition->currentText().toStdString() + ":\\";
+    }
 public slots:
     void uiUpdateDriveList();
     void encryptPartition();
